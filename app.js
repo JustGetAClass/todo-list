@@ -70,7 +70,7 @@ async function main() {
 	app.post("/delete", function (req, res) {
 		let checkedItemId = req.body.checkbox;
 		if (checkedItemId) {
-			checkedItemId = checkedItemId.trim();
+			checkedItemId = checkedItemId.trim(); //* removes the extra space at the end that mongo adds
 		}
 		Item.findByIdAndRemove(checkedItemId)
 			.then(() => {
