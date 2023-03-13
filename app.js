@@ -74,9 +74,9 @@ async function main() {
 		}
 		Item.findByIdAndRemove(checkedItemId)
 			.then(() => {
-        console.log("successfully deleted checked item")
-        res.redirect("/");
-      })
+				console.log("successfully deleted checked item");
+				res.redirect("/");
+			})
 			.catch((err) => console.log(err));
 	});
 
