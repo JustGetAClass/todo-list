@@ -64,7 +64,20 @@ async function main() {
 		});
 
 		item.save();
-    res.redirect("/")
+		res.redirect("/");
+	});
+
+	app.post("/delete", function (req, res) {
+		let checkedItemId = req.body.checkbox;
+		if (checkedItemId) {
+			checkedItemId = checkedItemId.trim();
+		}
+		Item.findByIdAndRemove(checkedItemId)
+			.then(() => {
+        console.log("successfully deleted checked item")
+        res.redirect("/");
+      })
+			.catch((err) => console.log(err));
 	});
 
 	app.get("/work", function (req, res) {
