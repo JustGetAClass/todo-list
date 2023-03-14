@@ -17,7 +17,7 @@ app.use(express.static("public"));
 main().catch((err) => console.log(err));
 
 async function main() {
-	const url = "mongodb://127.0.0.1:27017/todolistDB";
+	const url = "mongodb://0.0.0.0:27017/todolistDB"; //127.0.0.1
 	await mongoose.connect(url, { useNewUrlParser: true });
 
 	const itemsSchema = new mongoose.Schema({
