@@ -90,12 +90,24 @@ async function main() {
 
 	app.post("/", function (req, res) {
 		const itemName = req.body.newItem;
+		const listName = req.body.list;
+
 		const item = new Item({
 			name: itemName,
 		});
 
-		item.save();
-		res.redirect("/");
+		if (listName === "Today") {
+			item.save();
+			res.redirect("/");
+		} else {
+			List.findOne({ name: listName })
+				.then((foundList) => {
+					foundList.items.push(item);
+					foundList.save();
+					res.redirect("/" + listName);
+				})
+				.catch((err) => console.log(err));
+		}
 	});
 
 	app.post("/delete", function (req, res) {
