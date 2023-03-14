@@ -2,6 +2,7 @@
 
 const express = require("express");
 const mongoose = require("mongoose");
+const _ = require("lodash");
 // const date = require(__dirname + "/date.js");
 
 const app = express();
@@ -65,7 +66,9 @@ async function main() {
 	});
 
 	app.get("/:customListName", function (req, res) {
-		const customListName = req.params.customListName;
+		const customListName = _.capitalize(req.params.customListName);
+
+		if (customListName == "Favicon.ico") return;
 
 		List.findOne({ name: customListName })
 			.then((foundList) => {
@@ -112,15 +115,29 @@ async function main() {
 
 	app.post("/delete", function (req, res) {
 		let checkedItemId = req.body.checkbox;
+		const listName = req.body.listName;
+
 		if (checkedItemId) {
 			checkedItemId = checkedItemId.trim(); //* removes the extra space at the end that mongo adds
 		}
-		Item.findByIdAndRemove(checkedItemId)
-			.then(() => {
-				console.log("successfully deleted checked item");
-				res.redirect("/");
-			})
-			.catch((err) => console.log(err));
+
+		if (listName === "Today") {
+			Item.findByIdAndRemove(checkedItemId)
+				.then(() => {
+					console.log("successfully deleted checked item");
+					res.redirect("/");
+				})
+				.catch((err) => console.log(err));
+		} else {
+			List.findOneAndUpdate(
+				{ name: listName },
+				{ $pull: { items: { _id: checkedItemId } } }
+			)
+				.then((foundList) => {
+					res.redirect("/" + listName);
+				})
+				.catch((err) => console.log(err));
+		}
 	});
 
 	app.get("/about", function (req, res) {
