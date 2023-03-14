@@ -3,7 +3,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const _ = require("lodash");
-// const date = require(__dirname + "/date.js");
 
 const app = express();
 
@@ -48,8 +47,6 @@ async function main() {
 	const List = mongoose.model("List", listSchema);
 
 	app.get("/", function (req, res) {
-		// const day = date.getDate();
-
 		Item.find()
 			.then((items) => {
 				if (items.length === 0) {
