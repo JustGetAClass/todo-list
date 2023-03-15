@@ -16,7 +16,8 @@ app.use(express.static("public"));
 main().catch((err) => console.log(err));
 
 async function main() {
-	const url = "mongodb://0.0.0.0:27017/todolistDB"; //127.0.0.1
+	const url =
+		"mongodb+srv://moha-admin:DJTJkC4f49Ot6BeW@cluster0.bnfj4ya.mongodb.net/todolistDB"; //127.0.0.1
 	await mongoose.connect(url, { useNewUrlParser: true });
 
 	const itemsSchema = new mongoose.Schema({
@@ -64,8 +65,6 @@ async function main() {
 
 	app.get("/:customListName", function (req, res) {
 		const customListName = _.capitalize(req.params.customListName);
-
-		if (customListName == "Favicon.ico") return;
 
 		List.findOne({ name: customListName })
 			.then((foundList) => {
